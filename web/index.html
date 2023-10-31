@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo</title>
+</head>
+
+<body>
+    <div>
+        <!-- url 转换 -->
+        <button id="btn1">test1</button>
+        <br>
+        <img id="img1" />
+    </div>
+    <div>
+        <!-- 上传文件 转换 -->
+        <input id="input1" type="file">
+        <br>
+        <img id="img2" />
+    </div>
+
+    <script>
+        // url 转换
+        const btn1 = document.getElementById('btn1');
+        const img1 = document.getElementById('img1');
+        btn1.onclick = async function () {
+            const res = await fetch('http://localhost:3000/test1', { method: "GET" });
+            const blob = await res.blob();
+            const base64 = URL.createObjectURL(blob);
+            img1.src = base64;
+        }
+
+        // 上传文件 转换
+        const input1 = document.getElementById('input1');
+        const img2 = document.getElementById('img2');
+        input1.onchange = async function (e) {
+            const file = e.target.files[0] || e.dataTransfer.files[0];
+            const formData = new FormData();
+            formData.append('file', file);
+            const res = await fetch('http://localhost:3000/upload', { method: "POST", body: formData });
+            const blob = await res.blob();
+            const base64 = URL.createObjectURL(blob);
+            img2.src = base64;
+        }
+    </script>
+</body>
+
+</html>
